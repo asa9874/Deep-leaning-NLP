@@ -1,4 +1,4 @@
-#단어 토큰라이저 (상수 텐서) 
+#단어 토큰라이저 
 
 from nltk.tokenize import TreebankWordTokenizer
 tokenizer = TreebankWordTokenizer()
