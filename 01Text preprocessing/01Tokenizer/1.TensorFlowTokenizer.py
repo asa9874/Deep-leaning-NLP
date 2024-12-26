@@ -6,7 +6,7 @@ from nltk.tokenize import TreebankWordTokenizer
 text = tf.constant("Hello, my name is asa! How are you?")
 
 # 특수 문자 제거
-text = tf.strings.regex_replace(text, r'[!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n]', '')
+text = tf.strings.regex_replace(text, r'[^a-zA-Z0-9 ]', '')
 
 # 단어로 분리 
 tokens = tf.strings.split(text)
