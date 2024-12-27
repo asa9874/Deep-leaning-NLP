@@ -18,8 +18,10 @@ text="최근 들어 많은 사람들이 취미로 코딩을 배우기 시작했�
 okt = Okt()
 
 tokens = okt.morphs(text)
+tokens = [token for token in tokens if token.isalnum()] 
 
 result = [word for word in tokens if not word in stopwords_set]
 
 # 결과 출력
+print(tokens)
 print(result)
