@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer,TFAutoModelForSequenceClassification
+from transformers import AutoTokenizer,TFAutoModelForSequenceClassification, DataCollatorWithPadding
 import tensorflow as tf
 from datasets import load_dataset
 
@@ -17,5 +17,11 @@ def tokenize_function(example):
 
 ### 데이터셋 토큰화
 tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
+
+### 데이터셋 패딩
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
+# 데이터셋 저장
+tokenized_datasets.save_to_disk("./tokenized_datasets")
 
 print(tokenized_datasets["train"][0])
