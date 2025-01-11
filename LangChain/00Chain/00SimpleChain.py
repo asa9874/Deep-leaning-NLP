@@ -5,7 +5,7 @@ from langchain_ollama import OllamaLLM
 
 llm = OllamaLLM(model="llama3.1")
 
-template = "{country}의 수도는 어디입니까?"
+template = """{country}의 수도는 어디입니까?"""
 
 prompt = PromptTemplate.from_template(template=template)
 chain = prompt | llm | StrOutputParser()
