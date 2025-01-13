@@ -1,32 +1,24 @@
 from langchain_core.prompts import PromptTemplate
 
-from langchain_core.output_parsers import StrOutputParser, StructuredOutputParser
+from langchain_core.output_parsers import StrOutputParser,CommaSeparatedListOutputParser
 from langchain_ollama import OllamaLLM
-from pydantic import BaseModel, Field
 llm = OllamaLLM(model="llama3.1")
 
+output_parser = CommaSeparatedListOutputParser()
+format_instructions = output_parser.get_format_instructions()
 
 prompt = PromptTemplate(
     template=
     """
-    다음 내용중 중요 내용을 요약하시오: {email}
-    
-    Format:{format}
+    다음 내용중 중요 명사들을 나열하시오:{email}
 
-    """
+    {format_instructions}
+    """,
+    partial_variables={"format_instructions": format_instructions}
 )
 
-class EmailSummary(BaseModel):
-    person: str = Field(description="메일을 보낸 사람")
-    email: str = Field(description="메일을 보낸 사람의 이메일 주소")
-    subject: str = Field(description="메일 제목")
-    summary: str = Field(description="메일 본문을 요약한 텍스트")
-    date: str = Field(description="메일 본문에 언급된 미팅 날짜와 시간")
 
-parser = PydanticOutputParser(pydantic_object=EmailSummary)
-prompt = prompt.partial(format=parser.get_format_instructions())
-
-chain = prompt | llm | StrOutputParser()
+chain = prompt | llm | output_parser
 
 email = """
 From: 박지훈 (jihoon.park@cybertechsolutions.kr)
@@ -52,10 +44,6 @@ AEROLITE 모델의 부품 공급 가능성을 논의하고자 합니다. 특히,
 사이버테크솔루션즈
 
 """
-
-
-
-
 
 response = chain.invoke({"email": email})
 
